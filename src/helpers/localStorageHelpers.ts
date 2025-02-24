@@ -1,25 +1,10 @@
-import { TOKEN_KEY } from '@/config/user'
+import type { User } from '@/types/user'
 
-export const setStorageItemWithExpiry = (value: unknown): void => {
-  localStorage.setItem(TOKEN_KEY, `Bearer ${value}`)
+export const saveUsersListToLocalStorage = (usersList: User[]) => {
+  localStorage.setItem('usersList', JSON.stringify(usersList))
 }
 
-export const getStorageItemWithExpiry = (): null | string => {
-  try {
-    const item = localStorage.getItem(TOKEN_KEY)
-    if (!item){
-      return null
-    } 
-      return item
-  } catch {
-    return null
-  }
-}
-
-export const clearStorageItem = (): void => {
-  try {
-    localStorage.removeItem(TOKEN_KEY)
-  } catch {
-    console.error('Failed to remove item from localStorage')
-  }
+export const getUsersListFromLocalStorage = (): User[] => {
+  const usersList = localStorage.getItem('usersList');
+  return usersList ? JSON.parse(usersList) as User[] : [];
 }

@@ -72,7 +72,7 @@ watch(
   cursor: pointer;
   &__wrapper {
     position: relative;
-    width: 300px;
+    width: 100%;
     background-color: $white;
   }
   &__list {

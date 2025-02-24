@@ -2,7 +2,7 @@ import type { User } from '@/types/user'
 import type { OptionsDropdown } from '@/types/common'
 
 export const EMPTY_USER: User = {
-	"tags": "",
+	"tags": [],
 	"noteType": "local",
 	"login": "",
 	"password": "",

@@ -4,23 +4,19 @@
     <button 
       class="users-page__button" 
       @click="addUserHandler" 
-      :disabled="disableButton">
+      :disabled="!userStore.getUserValidateFlag">
       +
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user'
+const userStore = useUserStore()
 const emit = defineEmits(['addUser'])
 
-defineProps({
-  disableButton: {
-    type: Boolean,
-    default: false
-  }
-})
-
 const addUserHandler = () => {
+  userStore.saveNewUser()
   emit('addUser') 
 }
 </script>

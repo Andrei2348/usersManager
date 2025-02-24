@@ -1,29 +1,11 @@
-export interface UserItem {
-  username: string
-  email: string
-  password: string
-  repassword?: string
-}
-
-export interface UserItemResponse {
+export interface User{
   id?: number
-  username: string
-  email: string
-	description: string,
-	phone: string,
-	telegram: string,
-	github: string,
-	password: string,
-	repassword: string,
-	stack: string[]
+  tags: string
+  noteType: Notes
+  login: string
+  password: string | null
+  
 }
 
-export interface UserLoginItem {
-  email: string
-  password: string
-}
 
-export interface UserApiResponse {
-  data: UserItemResponse
-  token: string
-}
+export type Notes = 'local' | 'LDAP'

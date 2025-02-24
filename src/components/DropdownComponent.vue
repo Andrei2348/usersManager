@@ -79,7 +79,6 @@ watch(
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    padding: 8px 0;
     white-space: nowrap;
     background-color: $white;
     max-height: 173px;
@@ -87,7 +86,6 @@ watch(
     overflow-x: hidden;
     @include custom-scrollbar;
     border: 1px solid $gray;
-    border-radius: 4px;
     width: 100%;
     top: 47px;
     position: absolute;
@@ -103,7 +101,7 @@ watch(
     border-radius: 4px;
   }
   &__input-span {
-    color: $gray;
+    color: $black;
   }
   &__arrow{
     stroke: $gray;
@@ -117,7 +115,7 @@ watch(
     transition: all ease 0.4s;
     &:hover {
       color: $black;
-      background-color: $gray;
+      background-color: $gray3;
     }
     &.item-selected{
       color: $black;

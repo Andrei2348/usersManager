@@ -1,21 +1,23 @@
-import type { UserItemResponse } from '@/types/user'
-import type { UserLoginItem } from '@/types/user'
+import type { User } from '@/types/user'
+import type { OptionsDropdown } from '@/types/common'
 
-export const EMPTY_USER: UserItemResponse = {
-	"username": "",
-	"email": "",
-	"description": "",
-	"phone": "",
-	"telegram": "",
-	"github": "",
-	"password": "",
-	"repassword": "",
-	"stack": []
+export const EMPTY_USER: User = {
+	"tags": "",
+	"noteType": "local",
+	"login": "",
+	"password": null,
+	
 }
 
-export const EMPTY_LOGIN_FORM: UserLoginItem = {
-	"email": "",
-	"password": ""
-}
-
-export const TOKEN_KEY: string = 'crmToken'
+export const DROPDOWN_VALUES: OptionsDropdown[] = [
+	{
+		id: 1,
+		name: 'local',
+		label: 'Локальная'
+	},
+	{
+		id: 2,
+		name: 'LDAP',
+		label: 'LDAP'
+	}
+]

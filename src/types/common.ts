@@ -1,8 +1,5 @@
-export interface TabsName {
+export interface OptionsDropdown {
+  id: number
   name: string
   label: string
-}
-
-export interface OptionsDropdown extends TabsName {
-  id?: number
 }

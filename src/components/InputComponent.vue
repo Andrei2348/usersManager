@@ -1,32 +1,29 @@
 <template> 
 	<div class='input'>  
-		<label class='input__label' :for="name">{{ label }}</label>  
-		<div class="input__area-wrapper">  
-			<input 
-				:type="isPasswordVisible ? 'text' : type" 
-				v-bind="$attrs" 
-				class='input__area'  
-				:id="name"  
-				:placeholder="placeholder"   
-				:required="required"   
-				:readonly="readonly"
-				:disabled="disabled"  
-				:maxlength="maxlength"  
-				:autocomplete="autocomplete"
-				@focus="handleFocus"
-				@input="onInput"
-				:value="value"
-			/> 
-			<button 
-				class='input__password-visible' 
-				v-if="isPasswordField" 
-				type="button" 
-				@click="togglePasswordVisibility"
-			>  
-				<SvgIcon icon="eye" class='input__password-icon' v-if='isPasswordVisible'/>
-				<SvgIcon icon="eye-off" class='input__password-icon' v-else/>
-			</button>  
-		</div>  
+		<input 
+			:type="isPasswordVisible ? 'text' : type" 
+			v-bind="$attrs" 
+			class='input__area'  
+			:id="name"  
+			:placeholder="placeholder"   
+			:required="required"   
+			:readonly="readonly"
+			:disabled="disabled"  
+			:maxlength="maxlength"  
+			:autocomplete="autocomplete"
+			@focus="handleFocus"
+			@input="onInput"
+			:value="value"
+		/> 
+		<button 
+			class='input__password-visible' 
+			v-if="isPasswordField" 
+			type="button" 
+			@click="togglePasswordVisibility"
+		>  
+			<SvgIcon icon="eye" class='input__password-icon' v-if='isPasswordVisible'/>
+			<SvgIcon icon="eye-off" class='input__password-icon' v-else/>
+		</button>  
 	</div>  
 </template>  
  
@@ -37,10 +34,7 @@
 		name: {  
 			type: String,  
 			required: true  
-		},  
-		label: {  
-			type: String  
-		},  
+		},    
 		type: {  
 			type: String,  
 			default: 'text'  
@@ -108,32 +102,20 @@
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: center;
 	justify-content: space-between;
 	padding-bottom: 0;
+	position: relative;
 	transition: all ease 0.5s;
 	&.error__place-visible{
 		padding-bottom: 40px;
 	}
 	&__area{
-		background-color: $violet;
+		background-color: $black;
 		@include input;
 		&:read-only {  
 			border: 1px solid $gray;  
 		}  
-	}
-	&__area-wrapper{
-		width: 100%;
-		display: flex;
-		justify-content: flex-end;
-		align-items: center;
-		position: relative;
-	}
-	&__label{
-		white-space: nowrap;
-		margin-bottom: 8px;
-		color: $gray3;
-		@include textRegular(14);
 	}
 	&__password-visible{
 		border: none;

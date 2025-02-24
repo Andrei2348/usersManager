@@ -1,17 +1,28 @@
-<script setup lang="ts">
-</script>
-
 <template>
   <MainLayout>
-    <div>
-      <h1 class="title">Основной компонент</h1>
-      <RouterLink to="/projects">Go to projects</RouterLink>
+    <div class="container">
+      <div class="users-page">
+        <HeaderComponent @addUser="addUserHandler"/>
+        <UsersListComponent />
+      </div>
+
     </div>
   </MainLayout>
 </template>
 
+<script setup lang="ts">
+import HeaderComponent from '@/components/HeaderComponent.vue'
+import UsersListComponent from '@/components/UsersListComponent.vue'
+
+const addUserHandler = () => {
+  console.log('add user')
+}
+
+</script>
+
 <style lang="scss" scoped>
-.title {
-  color: $blue;
+.users-page {
+  display: flex;
+  flex-direction: column;
 }
 </style>

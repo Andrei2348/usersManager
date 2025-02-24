@@ -1,10 +1,9 @@
 <template>
   <div class="select">
-    <p class="select__label" v-if="label">{{ label }}</p>
     <div class="select__wrapper" v-click-outside="closeMenuHandler">
       <div ref="select" class="select__input-wrapper" @click="toggleDropdown">
         <div class="select__input">
-          <span class="select__input-span">{{ selectedOption ? selectedOption.label : 'Выберите...' }}</span>
+          <span class="select__input-span">{{ selectedOption ? selectedOption.label : 'Тип записи' }}</span>
           <SvgIcon icon="arrow_down" class="select__arrow" :class="{ rotate: isOpen }" />
         </div>
       </div>
@@ -31,11 +30,6 @@ const props = defineProps({
   options: {  
     type: Array as () => OptionsDropdown[],  
     default: () => [],  
-  },  
-  label: { 
-    type: String, 
-    required: false, 
-    default: '' 
   },
   initialValue: {  
     type: Object as () => OptionsDropdown | null,  
@@ -92,7 +86,8 @@ watch(
     overflow-y: auto;
     overflow-x: hidden;
     @include custom-scrollbar;
-    border: 1px solid $gray3;
+    border: 1px solid $gray;
+    border-radius: 4px;
     width: 100%;
     top: 47px;
     position: absolute;
@@ -104,18 +99,14 @@ watch(
     align-items: center;
     padding: 4px 6px;
     height: 48px;
-    border: 1px solid $gray3;
+    border: 1px solid $gray;
+    border-radius: 4px;
   }
   &__input-span {
-    color: $gray3;
-  }
-  &__label{
-    margin-bottom: 8px;
-    color: $gray3;
-    @include textRegular(14);
+    color: $gray;
   }
   &__arrow{
-    stroke: $gray3;
+    stroke: $gray;
     transition: all ease 0.5s;
     &.rotate{
       transform: rotate(180deg);

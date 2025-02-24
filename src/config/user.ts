@@ -5,7 +5,7 @@ export const EMPTY_USER: User = {
 	"tags": "",
 	"noteType": "local",
 	"login": "",
-	"password": null,
+	"password": "",
 	
 }
 

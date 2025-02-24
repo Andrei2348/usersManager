@@ -13,9 +13,12 @@
 <script setup lang="ts">
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import UsersListComponent from '@/components/UsersListComponent.vue'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
 
 const addUserHandler = () => {
-  console.log('add user')
+  userStore.setEmptyAreaVisible(true)
 }
 
 </script>

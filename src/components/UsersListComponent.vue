@@ -4,19 +4,34 @@
       <UserAreaComponent   
       v-for="user in userStore.usersList"   
       :key="user.id"   
-      :user="user"   
+      :user="user" 
+      @deleteExistingUser="deleteExistingUser"  
       />  
     </div>
     <div class="users-list__empty" v-else>
       Список пользователей пока пуст!
     </div>
+    <UserAreaComponent 
+      v-if="userStore.getEmptyAreaVisible"
+      :user="EMPTY_USER" 
+      @deleteUser="hideEmtyUserArea" />
   </div>
 </template>
 
 <script setup lang="ts">
 import UserAreaComponent from '@/components/UserAreaComponent.vue'
 import { useUserStore } from '@/stores/user'
+import { EMPTY_USER } from '@/config/user'
 const userStore = useUserStore()
+
+const hideEmtyUserArea = () => {
+  userStore.setEmptyAreaVisible(false)
+}
+
+const deleteExistingUser = (id: number) => {
+  userStore.deleteUserfromList(id)
+}
+
 
 </script>
 

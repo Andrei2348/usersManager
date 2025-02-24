@@ -4,7 +4,6 @@
 			:type="isPasswordVisible ? 'text' : type" 
 			v-bind="$attrs" 
 			class='input__area'  
-			:id="name"  
 			:placeholder="placeholder"   
 			:required="required"   
 			:readonly="readonly"
@@ -30,11 +29,7 @@
 <script lang="ts" setup>
 	import { computed, ref } from 'vue' 
 	
-	const props = defineProps({
-		name: {  
-			type: String,  
-			required: true  
-		},    
+	const props = defineProps({   
 		type: {  
 			type: String,  
 			default: 'text'  
@@ -79,7 +74,7 @@
 	}
 
 	const handleFocus = () => {
-		emit('focus', props.name)
+		emit('focus')
 	}
 
 	const isPasswordField = computed(() => props.type === 'password') 
@@ -130,6 +125,3 @@
 	}
 }
 </style>
-
-
-

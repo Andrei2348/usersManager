@@ -19,7 +19,6 @@ export const useUserStore = defineStore('user', () => {
 
   const addValidateFlag = (payload: boolean) => {
     validateFlags.value.push(payload)
-    console.log(validateFlags.value)
   }
 
   const removeValidateFlagByIndex = (index: number) => {
@@ -48,14 +47,13 @@ export const useUserStore = defineStore('user', () => {
     return usersList.value
   })
 
-  const saveNewUser = _.debounce(() => {  
-    console.log('save') 
+  const saveNewUser =() => {   
     const existingUserIndex = usersList.value.findIndex(user => user.id === userForEdit.value.id)  
     if(existingUserIndex !== -1) {  
       usersList.value[existingUserIndex] = _.cloneDeep(userForEdit.value)  
       saveUsersListToLocalStorage(usersList.value)   
     }  
-  }, 300)
+  }
   
   const setUserForEdit = (payload: User) => {
     userForEdit.value = payload

@@ -12,3 +12,7 @@ export const validateUserData = (user: User) => {
 
   return isLoginValid && isPasswordValid && isTagsValid
 }
+
+export const validateAllFlags = (flags: boolean[]) => {
+  return flags.every((flag: boolean) => flag === true)
+}

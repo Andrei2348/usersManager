@@ -1,6 +1,10 @@
 <template>
   <div class="users-list">
     <div class="users-list__container" v-if="userStore.getUsersList.length > 0">
+      <div class="users-list__info--wrapper">
+        <span class="users-list__span">?</span>
+        <p class="users-list__info">Для указания нескольких меток для одной пары логин/пароль используйте разделитель;</p>
+      </div>
       <div class="users-list__header">
         <p class="users-list__header--content">Метки</p>
         <p class="users-list__header--content">Тип записи</p>
@@ -10,6 +14,7 @@
       <UserAreaComponent   
         v-for="(user, index) in userStore.getUsersList"   
         :key="user.id"   
+        class="users-list__user--item"
         :user="user" 
         :index="index"
         @deleteUser="deleteUser"  
@@ -36,6 +41,30 @@ const deleteUser = (id: number) => {
     margin-top: 40px;
     overflow-y: auto;
     min-height: calc(100vh - 200px);
+    padding-bottom: 100px;
+    &__info--wrapper{
+      display: inline-flex;
+      padding: 8px;
+      border-radius: 4px;
+      width: 70%;
+      margin-bottom: 10px;
+      background-color: $gray3;
+    }
+    &__span{
+      display: block;
+      height: 26px;
+      width: 26px;
+      border: 1px solid $black;
+      border-radius: 50%;
+      text-align: center;
+      margin-right: 10px;
+      @include textRegular(16px);
+      color: $black;
+    }
+    &__info{
+      @include textRegular(16px);
+      color: $black;
+    }
     &__container{
       display: flex;
       flex-direction: column;
@@ -56,6 +85,9 @@ const deleteUser = (id: number) => {
         @include textRegular(16px);
         color: $darkGray;
       }
+    }
+    &__user--item:last-child{
+      padding-bottom: 80px;
     }
   }
 </style>

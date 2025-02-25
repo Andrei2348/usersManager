@@ -1,15 +1,44 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { EMPTY_USER } from '@/config/user'
+import _ from 'lodash'
 import { saveUsersListToLocalStorage } from '@/helpers/localStorageHelpers'
+import { setUserId } from '@/helpers/setIdForUser'
 import type { User } from '@/types/user'
 
 export const useUserStore = defineStore('user', () => {
   const usersList = ref<User[]>([])
 
-  const newUser = ref<User>({...EMPTY_USER})
-  const emptyAreaVisible = ref(false)
-  const userValidateFlag = ref(true)
+  const userForEdit = ref<User>(_.cloneDeep(EMPTY_USER))
+
+  const validateFlags = ref<boolean[]>([])
+
+  const setValidateFlags = (index: number, payload: boolean) => {
+    validateFlags.value[index] = payload
+  }
+
+  const addValidateFlag = (payload: boolean) => {
+    validateFlags.value.push(payload)
+    console.log(validateFlags.value)
+  }
+
+  const removeValidateFlagByIndex = (index: number) => {
+    validateFlags.value.splice(index, 1)
+  }
+
+  const getValidateFlags = computed(() => {
+    return  validateFlags.value
+  })
+
+  const addNewUser = () => {  
+    usersList.value.push(_.cloneDeep(EMPTY_USER))
+    const newUserId = setUserId(usersList.value) 
+    if(newUserId){
+      usersList.value[usersList.value.length - 1].id = newUserId + 1  
+    } else {
+      usersList.value[usersList.value.length - 1].id = 1
+    } 
+  }
 
   const setUsersList = (payload: User[]) => {
     usersList.value = payload
@@ -19,42 +48,21 @@ export const useUserStore = defineStore('user', () => {
     return usersList.value
   })
 
-  const setEmptyAreaVisible = (payload: boolean): void => {
-    emptyAreaVisible.value = payload
-    if(emptyAreaVisible.value){
-      userValidateFlag.value = false
-    } else {
-      userValidateFlag.value = true
-    }
-  }
-
-  const saveNewUser = () => {
-    if (newUser.value.id) {
-      const existingUserIndex = usersList.value.findIndex(user => user.id === newUser.value.id)
-      if (existingUserIndex !== -1) {
-        usersList.value[existingUserIndex] = newUser.value
-      } else {
-        usersList.value = [...usersList.value, newUser.value]
-      }
-      saveUsersListToLocalStorage(usersList.value)
-    }
-    newUser.value = { ...EMPTY_USER }
-  }
+  const saveNewUser = _.debounce(() => {  
+    console.log('save') 
+    const existingUserIndex = usersList.value.findIndex(user => user.id === userForEdit.value.id)  
+    if(existingUserIndex !== -1) {  
+      usersList.value[existingUserIndex] = _.cloneDeep(userForEdit.value)  
+      saveUsersListToLocalStorage(usersList.value)   
+    }  
+  }, 300)
   
-  const setNewUser = (payload: User) => {
-    newUser.value = payload
+  const setUserForEdit = (payload: User) => {
+    userForEdit.value = payload
   }
 
-  const setUserValidateFlag = (payload: boolean): void => {
-    userValidateFlag.value = payload
-  }
-
-  const getEmptyAreaVisible = computed(() => {
-    return emptyAreaVisible.value
-  })
-
-  const getUserValidateFlag = computed(() => {
-    return userValidateFlag.value
+  const getUserForEdit = computed(() => {
+    return userForEdit.value
   })
 
   const deleteUserfromList = (id: number) => {
@@ -63,16 +71,18 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
+    addNewUser,
     usersList,
-    newUser,
-    setEmptyAreaVisible,
-    getEmptyAreaVisible,
+    userForEdit,
     deleteUserfromList,
-    setUserValidateFlag,
-    getUserValidateFlag,
     saveNewUser,
-    setNewUser,
+    setUserForEdit,
+    getUserForEdit,
     setUsersList,
-    getUsersList
+    getUsersList,
+    setValidateFlags,
+    addValidateFlag,
+    getValidateFlags,
+    removeValidateFlagByIndex
   }
 })

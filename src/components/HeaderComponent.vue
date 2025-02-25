@@ -4,7 +4,7 @@
     <button 
       class="users-page__button" 
       @click="addUserHandler" 
-      :disabled="!userStore.getUserValidateFlag">
+      :disabled="!userStore.getValidateFlags.every((flag: boolean) => flag === true)">
       +
     </button>
   </div>
@@ -13,11 +13,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
 const userStore = useUserStore()
-const emit = defineEmits(['addUser'])
 
 const addUserHandler = () => {
-  userStore.saveNewUser()
-  emit('addUser') 
+  userStore.addNewUser()
 }
 </script>
 

@@ -1,27 +1,31 @@
 <template>
-  <div class="users-area">
+  <div class="users-area" :class="{ldap: newUser.noteType !== 'local'}">
     <InputComponent 
       placeholder="Метки"
       type="text"
       v-model:value="tagInput" 
+      @focus="handleFocus"
     />
     <DropdownComponent 
       :options='DROPDOWN_VALUES'
       @select='selectNoteType'
       :initialValue="getInitialDropdownValue()"
+      @focus="handleFocus"
     />
     <InputComponent 
       placeholder="Логин"
       type="text"
       v-model:value="newUser.login"
       :required="true"
+      @focus="handleFocus"
     />
-    <InputComponent v-if="selectedOption === 'local' && newUser.password !== null"
+    <InputComponent v-if="newUser.noteType === 'local'"
       placeholder="Пароль"
       type="password"
-      v-model:value="newUser.password"
+      v-model:value="passwordValue" 
       autocomplete='new-password'
       :required="selectedOption === 'local'"
+      @focus="handleFocus"
     />
     <button class="users-area__button" @click="deleteUserHandler">
       <SvgIcon icon="trash" class="users-area__button--icon" />
@@ -36,34 +40,44 @@ import DropdownComponent from '@/components/DropdownComponent.vue'
 import { DROPDOWN_VALUES } from '@/config/user'
 import { validateUserData } from '@/helpers/validateUserData'
 import { useUserStore } from '@/stores/user'
-import { findUserWithMaxId } from '@/helpers/setIdForUser'
 import type { OptionsDropdown } from '@/types/common'
-import type { User } from '@/types/user'
-
-
-const userStore = useUserStore()
+import type { User, Notes } from '@/types/user'
 
 const props = defineProps<{  
-  user: User
+  user: User,
+  index: Number
 }>() 
 
-const emit = defineEmits(['deleteUser', 'deleteExistingUser'])
+const emit = defineEmits(['deleteUser'])
 
+const userStore = useUserStore()
 const selectedOption = ref<string>('local')
 const newUser = reactive<User>({ ...props.user })
+
+const passwordValue = computed({
+  get() {
+    return newUser.password ?? ''
+  },
+  set(value: string) {
+    newUser.password = value || null
+  }
+})
 
 const selectNoteType = (option: OptionsDropdown | null) => {
   if(option){
     selectedOption.value = option.name
+    newUser.noteType = selectedOption.value as Notes
+    saveUser(newUser)
   }
 }
 
+const handleFocus = () => {
+  userStore.setUserForEdit(newUser)
+}
+
 const deleteUserHandler = () => {
-  if(props.user.id){
-    emit('deleteExistingUser', props.user.id)
-  } else {
-    emit('deleteUser')
-  }
+  userStore.removeValidateFlagByIndex(props.index)
+  emit('deleteUser', props.user.id)
 }
 
 const getInitialDropdownValue = () => {  
@@ -72,26 +86,25 @@ const getInitialDropdownValue = () => {
 }  
 
 const tagInput = computed({  
-  get: () => newUser.tags.join('; '), 
+  get: () => newUser.tags.map(tag => tag.text).join('; '), 
   set: (value: string) => {   
-    newUser.tags = value.split(';').map(tag => tag.trim()).filter(tag => tag !== "")  
+    newUser.tags = value.split(';').map(tag => ({ text: tag.trim() })).filter(tag => tag.text !== "")  
   }  
-})  
+})
 
 const saveUser = (user: User) => {
   const validateFlag = validateUserData(user)
-  userStore.setUserValidateFlag(validateFlag)
-  if(validateFlag){
-    userStore.setNewUser(newUser)
-  }
+  userStore.setValidateFlags(props.index, validateFlag)
 }
 
-watch(newUser, saveUser, { deep: true })
+watch(() => userStore.getValidateFlags, (newValue) => {     
+  const allValid = newValue.every((flag: boolean) => flag === true)  
+  if (allValid) {  
+    userStore.saveNewUser() 
+  } 
+}, {deep: true})  
 
-watch(() => props.user, (newVal) => {  
-  console.log('watch', newVal);  
-  Object.assign(newUser, newVal);  
-});
+watch(newUser, saveUser, { deep: true })
 
 watch(selectedOption, (newValue) => {  
   if (newValue === 'LDAP') {  
@@ -99,15 +112,12 @@ watch(selectedOption, (newValue) => {
   } else {
     newUser.password = ''
   }
-})  
+}, {deep: true})  
 
 onBeforeMount(() => {
-  const newId = findUserWithMaxId(userStore.usersList)?.id || 0
-  if (!newUser.id) {
-    newUser.id = newId + 1
-  }
+  const validateFlag = validateUserData(props.user)
+  userStore.addValidateFlag(validateFlag)
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -120,5 +130,8 @@ onBeforeMount(() => {
     border: none;
     cursor: pointer;
   }
+}
+.ldap{
+  grid-template-columns: 1fr 1fr 2fr 50px;
 }
 </style>

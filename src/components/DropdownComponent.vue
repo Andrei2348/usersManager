@@ -39,14 +39,18 @@ const props = defineProps({
 })
 
 const emit = defineEmits<{  
-  (e: 'select', item: OptionsDropdown | null): void  
-}>()  
+  (e: 'select', item: OptionsDropdown | null): void,
+  (e: 'focus'): void
+}>()   
 
 const selectedOption = ref<OptionsDropdown | null>(props.initialValue)
 const isOpen = ref(false)  
 
 const toggleDropdown = () => {  
   isOpen.value = !isOpen.value  
+  if (isOpen.value) {
+    emit('focus')
+  }
 }
 
 const closeMenuHandler = () => {  

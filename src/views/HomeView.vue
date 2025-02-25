@@ -2,7 +2,7 @@
   <MainLayout>
     <div class="container">
       <div class="users-page">
-        <HeaderComponent @addUser="addUserHandler"/>
+        <HeaderComponent />
         <UsersListComponent />
       </div>
     </div>
@@ -17,10 +17,6 @@ import { onBeforeMount } from 'vue'
 import { getUsersListFromLocalStorage } from '@/helpers/localStorageHelpers'
 
 const userStore = useUserStore()
-
-const addUserHandler = () => {
-  userStore.setEmptyAreaVisible(true)
-}
 
 onBeforeMount(() => {
   userStore.setUsersList(getUsersListFromLocalStorage())

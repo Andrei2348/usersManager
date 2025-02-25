@@ -1,9 +1,16 @@
-import type { User } from '@/types/user'
+import type { User } from '@/types/user';  
 
-export const findUserWithMaxId = (users: User[]): User | null => {
-  if (users.length === 0) return null
+export const setUserId = (users: User[]) => {  
+  if (users.length === 0) {  
+    return 1  
+  }  
 
-  return users.reduce((maxUser, currentUser) => {
-    return (currentUser.id !== undefined && currentUser.id > (maxUser.id ?? -Infinity)) ? currentUser : maxUser
-  }, users[0])
+  const maxId = users.reduce((max, user) => {  
+    if (user.id !== undefined) {  
+      return user.id > max ? user.id : max
+    }  
+    return max
+  }, -Infinity) 
+
+  return maxId === -Infinity ? null : maxId
 }

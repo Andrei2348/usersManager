@@ -1,5 +1,10 @@
 <template>
-  <div class="users-area" :class="{ldap: newUser.noteType !== 'local'}">
+  <div class="users-area" 
+    :class="{
+      ldap: newUser.noteType !== 'local',  
+      error: !userValidate 
+    }"
+    >
     <InputComponent 
       placeholder="Метки"
       type="text"
@@ -98,6 +103,10 @@ const tagInput = computed({
   }  
 })
 
+const userValidate = computed(() => {
+  return validateUserData(newUser)
+})
+
 const saveUser = (user: User) => {
   startValidate(user)
   const allValid = validateAllFlags(userStore.getValidateFlags)
@@ -135,6 +144,8 @@ onBeforeMount(() => {
 .users-area{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 50px;
+  padding: 6px;
+  border-radius: 4px;
   gap: 10px;
   &__button{
     background-color: transparent;
@@ -144,5 +155,8 @@ onBeforeMount(() => {
 }
 .ldap{
   grid-template-columns: 1fr 1fr 2fr 50px;
+}
+.error{
+  background-color: $redTransparent;
 }
 </style>

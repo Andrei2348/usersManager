@@ -86,8 +86,5 @@ const deleteUser = (id: number) => {
         color: $darkGray;
       }
     }
-    &__user--item:last-child{
-      padding-bottom: 80px;
-    }
   }
 </style>

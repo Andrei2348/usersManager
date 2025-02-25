@@ -106,8 +106,8 @@
 		padding-bottom: 40px;
 	}
 	&__area{
-		background-color: $black;
 		@include input;
+		background-color: $white;
 		&:read-only {  
 			border: 1px solid $gray;  
 		}  
